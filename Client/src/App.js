@@ -115,28 +115,17 @@ const Main = () => {
     checkAuth();
   }, []);
 
+  useEffect(() => {
+    console.log(onlineList)
+  }, [onlineList]);
 
   // set dirty to true only if activeFilter changes, if the active filter is not changed dirty = false avoids triggering a new fetch
   useEffect(() => {
     setDirty(true);
   }, [activeFilter])
 
-
+  //to handle timeout when user is typing
   let timeout = null;
-  /* useEffect(() => {
-    if(typing === '') return;
-    const timeout = setTimeout(() => {
-      setTyping('')
-    }, 2000);
-
-    return () => {
-      clearTimeout(timeout);
-    }
-  }, [typing]); */
-
-  /* useEffect(() => {
-    console.log('updated');
-  }, [typing]); */
 
   useEffect(() => {
     if (loggedIn) {
@@ -161,32 +150,35 @@ const Main = () => {
         }
       }
       if (flag === 0) {
-        //onlineList.push(datas);
-        setOnlineList(onlineList.concat(datas));
+        setOnlineList((l) => [...l, datas]);
       }
     }
     if (datas.typeMessage === "logout") {
-      for (i = 0; i < onlineList.length; i++) {
+      /* for (i = 0; i < onlineList.length; i++) {
         if (onlineList[i].userId === datas.userId) {
           onlineList.splice(i, 1);
         }
-      }
-      setOnlineList([...onlineList]);
+      } */
+      setOnlineList((l) => l.filter(x => x.userId !== datas.userId));
     }
     if (datas.typeMessage === "update") {
-      let flag = 0;
+      /* let flag = 0;
       for (i = 0; i < onlineList.length; i++) {
         if (onlineList[i].userId === datas.userId) {
           flag = 1;
           onlineList[i] = datas;
           setOnlineList([...onlineList]);
         }
-      }
+      } */
+      setOnlineList((l) => l.map(x => {
+        if (x.userId === datas.userId)
+          return datas;
+        return x; 
+      }))
 
-      if (flag === 0) {
-        //onlineList.push(datas);
-        setOnlineList(onlineList.concat(datas));
-      }
+      /* if (flag === 0) {
+        setOnlineList((l) => [...l, datas]);
+      } */
     }
     if (datas.typeMessage === "chat") {
       console.log(datas);
@@ -194,14 +186,9 @@ const Main = () => {
     }
     if (datas.typeMessage === "typing") {
       setTyping(datas.userName + " is typing ...");
-      if(timeout)
+      if (timeout)
         clearTimeout(timeout);
       timeout = setTimeout(() => setTyping(''), 1000);
-      /* if (typing === '') {
-        to = setTimeout(() => setTyping(''), 1000);
-        clearTimeout(to);
-        to = setTimeout(() => setTyping(''), 1000);
-      }*/
     }
     setDirty(true);
   }
@@ -354,7 +341,7 @@ const Main = () => {
       const user = await API.logIn(credentials);
 
       setUser(user);
-      ws.send('The userId is ' + user.id);
+      ws.send('userId:' + user.id);
       setLoggedIn(true);
     }
     catch (err) {

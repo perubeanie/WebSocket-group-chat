@@ -3,7 +3,7 @@
 var WSMessage = require('./ws_message.js');
 const WebSocket = require('ws');
 var loginMessagesMap = new Map();
-var wsUserIdMap = new Map();
+var wsUserIdMap = new Map(); //map each websocket to the userId
 
 var wss = new WebSocket.Server({ port: 5000 })
 
@@ -16,15 +16,10 @@ wss.on('connection', ws => {
 
     ws.on('message', message => {
 
-        //console.log('Received:', message);
-        if (message.startsWith('The userId is')) {
-            wsUserIdMap.set(parseInt(message.split(' ')[3]), ws);
+        if (RegExp('userId:[0-9]+').test(message)) {
+            wsUserIdMap.set(parseInt(message.split(':')[1]), ws);
         }
-
-        let regex = RegExp('chat,[0-9]+,[a-zA-Z]+,[0-9]+,[a-zA-Z.!?+-]*');
-        /* if (!regex.test(message))
-            ws.send('Wrong message. Undelivered (make sure you specified your name and your message contains only valid characters)') */
-        if (regex.test(message)) {
+        else if (RegExp('chat,[0-9]+,[a-zA-Z0-9]+,[0-9]+,[a-zA-Z.!?+-]*').test(message)) {
             let tokenized = message.split(',');
             const type = tokenized[0]
             const userId = tokenized[1]
@@ -34,8 +29,7 @@ wss.on('connection', ws => {
             const m = new WSMessage(type, parseInt(userId), name, parseInt(taskId), null, messageContent);
             sendSelectedClients(m, parseInt(taskId));
         }
-
-        if (message.startsWith('typing')) {
+        else if (RegExp('typing,[0-9]+,[a-zA-Z0-9]+,[0-9]+').test(message)) {
             let tokenized = message.split(',');
             const type = tokenized[0]
             const userId = tokenized[1]
@@ -44,13 +38,13 @@ wss.on('connection', ws => {
             const m = new WSMessage(type, parseInt(userId), name, parseInt(taskId));
             sendSelectedClients(m, parseInt(taskId));
         }
+        else
+            ws.send('The format of the message is wrong');
     });
 })
 
+//send the message only to the clients that have as active task the same task of the message
 const sendSelectedClients = (message, taskId) => {
-    
-    /* console.log('Size of wsUserIdMap ' + wsUserIdMap.size);
-    console.log('Size of loginMessagesMap' + loginMessagesMap.size); */
     wsUserIdMap.forEach((value, key) => {
         for (const login of loginMessagesMap.values()) {
             if (key === login.userId && login.taskId === taskId)
@@ -66,11 +60,11 @@ module.exports.sendAllClients = function sendAllClients(message) {
 };
 
 module.exports.saveMessage = function saveMessage(userId, message) {
-    /* console.log('Size BEFORE of loginMessagesMap' + loginMessagesMap.size);
-    console.log(loginMessagesMap.values()); */
+    console.log('Size BEFORE of loginMessagesMap' + loginMessagesMap.size);
+    console.log(loginMessagesMap.values());
     loginMessagesMap.set(userId, message);
-    /* console.log('Size AFTER of loginMessagesMap' + loginMessagesMap.size);
-    console.log(loginMessagesMap.values()); */
+    console.log('Size AFTER of loginMessagesMap' + loginMessagesMap.size);
+    console.log(loginMessagesMap.values());
 };
 
 module.exports.getMessage = function getMessage(userId) {

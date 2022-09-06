@@ -74,6 +74,7 @@ module.exports.authenticateUser = function authenticateUser (req, res, next) {
                 //notify all clients that a user has logged out from the service
                 var logoutMessage = new WSMessage('logout', user.id, user.name);
                 WebSocket.sendAllClients(logoutMessage);
+                console.log(user.id);
                 WebSocket.deleteMessage(user.id);
                 //clear the cookie
                 req.logout();

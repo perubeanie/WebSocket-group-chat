@@ -66,11 +66,11 @@ module.exports.sendAllClients = function sendAllClients(message) {
 };
 
 module.exports.saveMessage = function saveMessage(userId, message) {
-    console.log('Size BEFORE of loginMessagesMap' + loginMessagesMap.size);
-    console.log(loginMessagesMap.values());
+    /* console.log('Size BEFORE of loginMessagesMap' + loginMessagesMap.size);
+    console.log(loginMessagesMap.values()); */
     loginMessagesMap.set(userId, message);
-    console.log('Size AFTER of loginMessagesMap' + loginMessagesMap.size);
-    console.log(loginMessagesMap.values());
+    /* console.log('Size AFTER of loginMessagesMap' + loginMessagesMap.size);
+    console.log(loginMessagesMap.values()); */
 };
 
 module.exports.getMessage = function getMessage(userId) {

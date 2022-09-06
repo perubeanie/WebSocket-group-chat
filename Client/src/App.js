@@ -121,14 +121,22 @@ const Main = () => {
     setDirty(true);
   }, [activeFilter])
 
-  let to = null;
+
+  let timeout = null;
+  /* useEffect(() => {
+    if(typing === '') return;
+    const timeout = setTimeout(() => {
+      setTyping('')
+    }, 2000);
+
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [typing]); */
 
   /* useEffect(() => {
-    if (typing !== '') {
-      to = setTimeout(() => setTyping(''), 1000);
-      clearTimeout(to);
-    }
-  }, [typing]) */
+    console.log('updated');
+  }, [typing]); */
 
   useEffect(() => {
     if (loggedIn) {
@@ -185,12 +193,15 @@ const Main = () => {
       setChatContent((c) => c + datas.userName + ': ' + datas.messageContent + '\n');
     }
     if (datas.typeMessage === "typing") {
+      setTyping(datas.userName + " is typing ...");
+      if(timeout)
+        clearTimeout(timeout);
+      timeout = setTimeout(() => setTyping(''), 1000);
       /* if (typing === '') {
         to = setTimeout(() => setTyping(''), 1000);
         clearTimeout(to);
         to = setTimeout(() => setTyping(''), 1000);
-      }
-      setTyping(datas.userName + " is typing ..."); */
+      }*/
     }
     setDirty(true);
   }

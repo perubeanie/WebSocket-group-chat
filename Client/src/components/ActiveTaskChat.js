@@ -22,7 +22,7 @@ const ActiveTaskChat = (props) => {
 
     const handleTyping = (event) => {
         setMessage(event.target.value);
-        //ws.send('typing,' + localStorage.getItem('userId') + ',' + localStorage.getItem('username') + ',' + activeTask.id);
+        ws.send('typing,' + localStorage.getItem('userId') + ',' + localStorage.getItem('username') + ',' + activeTask.id);
     }
 
     const textArea = useRef();

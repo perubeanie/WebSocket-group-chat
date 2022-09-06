@@ -198,8 +198,8 @@ exports.selectTask = function selectTask(userId, taskId) {
                                                     var updateMessage = new WSMessage('update', parseInt(userId), rows[0].name, parseInt(taskId), rows[0].description);
                                                     //console.log("task selected");
                                                     WebSocket.sendAllClients(updateMessage);
-                                                    WebSocket.saveMessage(userId, new WSMessage('login', parseInt(userId), rows[0].name, parseInt(taskId), rows[0].description));
-                                        
+                                                    WebSocket.saveMessage(parseInt(userId), new WSMessage('login', parseInt(userId), rows[0].name, parseInt(taskId), rows[0].description));
+
                                                     resolve();
                                                 
                                             }

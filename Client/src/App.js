@@ -131,7 +131,6 @@ const Main = () => {
   }, [typing]) */
 
   useEffect(() => {
-    console.log(onlineList);
     if (loggedIn) {
       for (var i = 0; i < onlineList.length; i++) {
         if (user && user.id === onlineList[i].userId && onlineList[i].taskId) {
@@ -182,6 +181,7 @@ const Main = () => {
       }
     }
     if (datas.typeMessage === "chat") {
+      console.log(datas);
       setChatContent((c) => c + datas.userName + ': ' + datas.messageContent + '\n');
     }
     if (datas.typeMessage === "typing") {

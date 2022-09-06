@@ -48,6 +48,9 @@ wss.on('connection', ws => {
 })
 
 const sendSelectedClients = (message, taskId) => {
+    
+    /* console.log('Size of wsUserIdMap ' + wsUserIdMap.size);
+    console.log('Size of loginMessagesMap' + loginMessagesMap.size); */
     wsUserIdMap.forEach((value, key) => {
         for (const login of loginMessagesMap.values()) {
             if (key === login.userId && login.taskId === taskId)
@@ -63,7 +66,11 @@ module.exports.sendAllClients = function sendAllClients(message) {
 };
 
 module.exports.saveMessage = function saveMessage(userId, message) {
+    console.log('Size BEFORE of loginMessagesMap' + loginMessagesMap.size);
+    console.log(loginMessagesMap.values());
     loginMessagesMap.set(userId, message);
+    console.log('Size AFTER of loginMessagesMap' + loginMessagesMap.size);
+    console.log(loginMessagesMap.values());
 };
 
 module.exports.getMessage = function getMessage(userId) {

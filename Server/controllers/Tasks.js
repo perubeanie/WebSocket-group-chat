@@ -162,6 +162,8 @@ module.exports.getOwnedTasks = function getUserTasks(req, res, next) {
 
 module.exports.getAssignedTasks = function getAssignedTasks(req, res, next) {
     
+    console.log('req.user is ' + req.user);
+    console.log('re.pasarams.userId is ' + req.params.userId);
     if(req.user != req.params.userId){
         utils.writeJson(res, { errors: [{ 'param': 'Server', 'msg': 'The user is not characterized by the specified userId.' }], }, 403);
         return;

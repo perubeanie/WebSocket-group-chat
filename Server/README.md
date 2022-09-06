@@ -18,6 +18,12 @@ To test the app, use the following credentials:
 - Username: user.dsp@polito.it
 - Password: password
 
+- Username: frank.stein@polito.it
+- Password: ciao123
+
+- Username: karen.makise@polito.it
+- Password: hello123
+
 
 To set the number of items in each page of the pagination mechanism, change the OFFSET variable in:
 lab03-websockets\Server\utils\constants.js

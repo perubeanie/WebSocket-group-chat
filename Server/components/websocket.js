@@ -38,8 +38,8 @@ wss.on('connection', ws => {
             const m = new WSMessage(type, parseInt(userId), name, parseInt(taskId));
             sendSelectedClients(m, parseInt(taskId));
         }
-        else
-            ws.send('The format of the message is wrong');
+        /* else
+            ws.send('The format of the message is wrong'); */
     });
 })
 
@@ -60,11 +60,11 @@ module.exports.sendAllClients = function sendAllClients(message) {
 };
 
 module.exports.saveMessage = function saveMessage(userId, message) {
-    console.log('Size BEFORE of loginMessagesMap' + loginMessagesMap.size);
-    console.log(loginMessagesMap.values());
+    /* console.log('Size BEFORE of loginMessagesMap' + loginMessagesMap.size);
+    console.log(loginMessagesMap.values()); */
     loginMessagesMap.set(userId, message);
-    console.log('Size AFTER of loginMessagesMap' + loginMessagesMap.size);
-    console.log(loginMessagesMap.values());
+    /* console.log('Size AFTER of loginMessagesMap' + loginMessagesMap.size);
+    console.log(loginMessagesMap.values()); */
 };
 
 module.exports.getMessage = function getMessage(userId) {
